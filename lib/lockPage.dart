@@ -16,8 +16,46 @@ class _LockState extends State<Lock> {
         ),
         body: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Lock Page')
+              Container(
+                margin: EdgeInsets.all(10),
+                child:   SizedBox(
+                  width: 230,
+                  height: 50,
+                  child:ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('Turn On'),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.green),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.all(15),
+                child:  SizedBox(
+                  width: 230,
+                  height: 50,
+                  child:ElevatedButton(
+                    onPressed: () {},
+                    child: const Text('Turn Off'),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.red),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         )
