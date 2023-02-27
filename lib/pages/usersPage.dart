@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:iot_project/main.dart';
+import 'package:iot_project/theme/colors.dart';
 
 class User {
   final String fullName;
@@ -12,14 +14,14 @@ class User {
   User({required this.fullName, required this.profilePictureUrl, required this.allowed});
 }
 
-class Users extends StatefulWidget {
-  const Users({Key? key}) : super(key: key);
+class UsersPage extends StatefulWidget {
+  const UsersPage({Key? key}) : super(key: key);
 
   @override
-  State<Users> createState() => _UsersState();
+  State<UsersPage> createState() => _UsersState();
 }
 
-class _UsersState extends State<Users> {
+class _UsersState extends State<UsersPage> {
   final List<User> users = [
     User(
         fullName: 'Aissam Boussoufiane',
@@ -57,56 +59,63 @@ class _UsersState extends State<Users> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Users'),
-      ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                controller: filterController,
-                onChanged: filterUsersByName,
-                decoration: InputDecoration(
-                  hintText: 'Search By Name',
-                  prefixIcon: Icon(Icons.search),
+        backgroundColor: primary,
+        body: getBody()
+    );
+  }
+  Widget getBody() {
+    return SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(top: 20, left: 5, right: 5),
+          child: Column(
+            children: [
+                TextField(
+                  controller: filterController,
+                  onChanged: filterUsersByName,
+                  decoration: InputDecoration(
+                    hintText: 'Search By Name',
+                    prefixIcon: Icon(Icons.search),
+                    fillColor: primary
+                  ),
                 ),
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: filtredUsers.length,
-                itemBuilder: (context, index) {
-                  final isAllowedColor = filtredUsers[index].allowed ? Colors.green : Colors.red;
-                  final String isAllowedText = filtredUsers[index].allowed ? 'Allowed' : 'Not Allowed';
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(filtredUsers[index].profilePictureUrl),
-                    ),
-                    title: Row(
-                      children: [
-                        Text(filtredUsers[index].fullName),
-                        SizedBox(width: 8),
-                        Text(isAllowedText, style: TextStyle(fontWeight: FontWeight.bold)),
-                        Icon(Icons.circle, color: isAllowedColor,)
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
+              Container(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: filtredUsers.length,
+                  itemBuilder: (context, index) {
+                    final isAllowedColor = filtredUsers[index].allowed ? Colors.green : Colors.red;
+                    final String isAllowedText = filtredUsers[index].allowed ? 'Allowed' : 'Not Allowed';
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(filtredUsers[index].profilePictureUrl),
+                      ),
+                      title: Row(
+                        children: [
+                          Text(filtredUsers[index].fullName),
+                          SizedBox(width: 8),
+                          Text(isAllowedText, style: TextStyle(fontWeight: FontWeight.bold)),
+                          Icon(Icons.circle, color: isAllowedColor,)
+                        ],
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
                               builder: (context) => UserPage(user: filtredUsers[index]),
-                          ));
-                    },
-                  );
-                },
-              ),
-            )
-          ],
+                            ));
+                      },
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
         )
     );
   }
 }
+
+
 
 class UserPage extends StatefulWidget {
   final User user;

@@ -1,7 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dashboardPage.dart';
-import 'lockPage.dart';
-import 'usersPage.dart';
+import 'package:iot_project/pages/settingsPage.dart';
+import 'package:iot_project/theme/colors.dart';
+import 'pages/dashboardPage.dart';
+import 'pages/lockPage.dart';
+import 'pages/usersPage.dart';
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+
+
 
 class HomeApp extends StatefulWidget {
   const HomeApp({Key? key}) : super(key: key);
@@ -15,16 +21,17 @@ class HomeApp extends StatefulWidget {
 
 
 class _HomeAppState extends State<HomeApp> {
-  int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[
-      Dashboard(),
-      Lock(),
-      Users()
+  int selectedPage = 0;
+  static const List<Widget> pages = <Widget>[
+      DashboardPage(),
+      LockPage(),
+      UsersPage(),
+      SettingsPage()
   ];
 
-  void _onItemTapped(int index) {
+  void onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      selectedPage = index;
       print('Pressed ${index}');
     });
 }
@@ -32,27 +39,62 @@ class _HomeAppState extends State<HomeApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-              icon: Icon(Icons.data_usage),
-              label: 'Dashboard'
+      backgroundColor: primary,
+      body: getBody(),
+      bottomNavigationBar: getFooter(),
+      floatingActionButton: SafeArea(
+        child: SizedBox(
+          // height: 30,
+          // width: 40,
+          child: FloatingActionButton(
+            onPressed: () {},
+            child: Icon(
+              Icons.add,
+              size: 20,
+            ),
+            backgroundColor: buttoncolor,
+            // shape:
+            //     BeveledRectangleBorder(borderRadius: BorderRadius.circular(4)),
           ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.lock),
-              label: 'Lock'
-          ),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              label: 'Users'
-          )
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+
+  Widget getBody() {
+    return IndexedStack(
+      index: selectedPage,
+      children: pages,
+    );
   }
+
+  Widget getFooter() {
+    List<IconData> iconItems = [
+      CupertinoIcons.home,
+      CupertinoIcons.lock,
+      CupertinoIcons.person,
+      CupertinoIcons.settings,
+    ];
+    return AnimatedBottomNavigationBar(
+        backgroundColor: primary,
+        icons: iconItems,
+        splashColor: secondary,
+        inactiveColor: black.withOpacity(0.5),
+        gapLocation: GapLocation.center,
+        activeIndex: selectedPage,
+        notchSmoothness: NotchSmoothness.softEdge,
+        leftCornerRadius: 10,
+        iconSize: 25,
+        rightCornerRadius: 10,
+        elevation: 2,
+        onTap: (index) {
+          onItemTapped(index);
+        });
+  }
+
+
+  }
+
+
+
