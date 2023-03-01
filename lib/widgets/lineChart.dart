@@ -204,8 +204,8 @@ class _LineChartState extends State<LineChartSample> {
               colors: gradientColors
                   .map((color) => color.withOpacity(0.2))
                   .toList(),
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter
             ),
           ),
         ),

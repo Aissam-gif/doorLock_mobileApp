@@ -51,12 +51,14 @@ class _LockState extends State<LockPage> {
               Container(
                 width: 250,
                 height: 250,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                        image: AssetImage('assets/images/'+lock.lockImage),
-                        fit: BoxFit.cover,
-                    )
+                child: lock.lockState ? Icon(
+                    Icons.lock_clock,
+                  size: 250,
+                  color: mainFontColor,
+                ) : Icon(
+                    Icons.lock_open,
+                  size: 250,
+                  color: mainFontColor,
                 ),
               ),
               SizedBox(
