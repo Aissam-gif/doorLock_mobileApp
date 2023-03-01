@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:iot_project/theme/colors.dart';
 import 'package:badges/badges.dart';
 import 'package:icon_badge/icon_badge.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:iot_project/widgets/lineChart.dart';
+
+
+
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -20,6 +25,10 @@ class _DashboardState extends State<DashboardPage> {
           child: Column(
             children: [
               Container(
+                margin: EdgeInsets.only(top: 10, left: 10, right: 20, bottom: 10),
+                child: LineChartSample(),
+              ),
+              /*  Container(
                 margin: EdgeInsets.only(top: 25, left: 25, right: 25, bottom: 10),
                 decoration: BoxDecoration(
                     color: white,
@@ -36,7 +45,9 @@ class _DashboardState extends State<DashboardPage> {
                   padding: const EdgeInsets.only(
                       top: 20, bottom: 25, right: 20, left: 20),
                   child: Column(
-                   /* children: [
+                    children: [
+                      LineChartSample(),
+                   children: [
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,10 +178,10 @@ class _DashboardState extends State<DashboardPage> {
                           ),
                         ],
                       )
-                    ], */
-                  ),
+                    ],
+                  ]),
                 ),
-              ),
+              ),*/
               SizedBox(
                 height: 10,
               ),
@@ -190,8 +201,8 @@ class _DashboardState extends State<DashboardPage> {
                                   color: mainFontColor,
                                 )),
                             IconBadge(
-                              icon: Icon(Icons.notifications_none),
-                              itemCount: 1,
+                              icon: Icon(Icons.settings),
+                              itemCount: 0,
                               badgeColor: Colors.red,
                               itemColor: mainFontColor,
                               hideZero: true,
