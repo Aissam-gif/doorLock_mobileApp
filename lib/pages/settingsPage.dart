@@ -15,7 +15,8 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return GridView.count(
+    return SafeArea(child:
+    GridView.count(
       crossAxisCount: 2,
       children: [
         Container(
@@ -42,13 +43,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 height: 5,
               ),
               Text(
-                  "Opening Door",
+                "Opening Door",
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: black
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: black
                 ),
-                ),
+              ),
               SizedBox(
                 height: 15,
               ),
@@ -110,6 +111,8 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
 
       ],
-    );
+    )
+    ) ;
+
   }
 }

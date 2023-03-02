@@ -52,7 +52,7 @@ class _LockState extends State<LockPage> {
                 width: 250,
                 height: 250,
                 child: lock.lockState ? Icon(
-                    Icons.lock_clock,
+                    Icons.lock,
                   size: 250,
                   color: mainFontColor,
                 ) : Icon(

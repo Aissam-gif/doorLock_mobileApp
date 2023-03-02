@@ -43,7 +43,7 @@ class _DashboardState extends State<DashboardPage> {
                             Text("Overview",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                                  fontSize: 23,
                                   color: mainFontColor,
                                 )),
                             IconBadge(
@@ -64,28 +64,26 @@ class _DashboardState extends State<DashboardPage> {
                     Text("Jan 16, 2023",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                          fontSize: 15,
                           color: mainFontColor,
                         )),
                   ],
                 ),
               ),
               SizedBox(
-                height: 5,
+                height: 30,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.only(
-                              top: 20,
-                              left: 25,
-                              right: 25,
-                            ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 25, right: 25),
+                  child:
+                  SizedBox(
+                      child: GridView.count(
+                        shrinkWrap: true,
+                        mainAxisSpacing: 20,
+                        crossAxisSpacing: 40,
+                        crossAxisCount: 2,
+                        children: [
+                          Container(
                             decoration: BoxDecoration(
                                 color: white,
                                 borderRadius: BorderRadius.circular(25),
@@ -97,88 +95,40 @@ class _DashboardState extends State<DashboardPage> {
                                     // changes position of shadow
                                   ),
                                 ]),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 10, bottom: 10, right: 20, left: 20),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: arrowbgColor,
-                                      borderRadius: BorderRadius.circular(15),
-                                      // shape: BoxShape.circle
-                                    ),
-                                    child: Center(
-                                        child: Icon(Icons.arrow_upward_rounded)),
+                            child:  Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.door_front_door_rounded,
+                                  size: 50,
+                                  color: Colors.orangeAccent,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "Opening Door",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                      color: black
                                   ),
-                                  SizedBox(
-                                    width: 15,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "130",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                      color: mainFontColor
                                   ),
-                                  Expanded(
-                                    child: Container(
-                                      width: (size.width - 90) * 0.7,
-                                      child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Sent",
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: black,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                              "Sending Payment to Clients",
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: black.withOpacity(0.5),
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          ]),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            "\$150",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: black),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
+                                )
+                              ],
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.only(
-                              top: 10,
-                              left: 25,
-                              right: 25,
-                            ),
+                          Container(
                             decoration: BoxDecoration(
                                 color: white,
                                 borderRadius: BorderRadius.circular(25),
@@ -190,88 +140,40 @@ class _DashboardState extends State<DashboardPage> {
                                     // changes position of shadow
                                   ),
                                 ]),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 10, bottom: 10, right: 20, left: 20),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: arrowbgColor,
-                                      borderRadius: BorderRadius.circular(15),
-                                      // shape: BoxShape.circle
-                                    ),
-                                    child: Center(
-                                        child: Icon(Icons.arrow_downward_rounded)),
+                            child:  Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.supervised_user_circle,
+                                  size: 50,
+                                  color: Colors.greenAccent,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "Users",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                      color: black
                                   ),
-                                  SizedBox(
-                                    width: 15,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "130",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 25,
+                                      color: mainFontColor
                                   ),
-                                  Expanded(
-                                    child: Container(
-                                      width: (size.width - 90) * 0.7,
-                                      child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Receive",
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: black,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                              "Receiving Payment from company",
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: black.withOpacity(0.5),
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          ]),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            "\$250",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: black),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
+                                )
+                              ],
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.only(
-                              top: 10,
-                              left: 25,
-                              right: 25,
-                            ),
+                          Container(
                             decoration: BoxDecoration(
                                 color: white,
                                 borderRadius: BorderRadius.circular(25),
@@ -283,78 +185,80 @@ class _DashboardState extends State<DashboardPage> {
                                     // changes position of shadow
                                   ),
                                 ]),
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 10, bottom: 10, right: 20, left: 20),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: arrowbgColor,
-                                      borderRadius: BorderRadius.circular(15),
-                                      // shape: BoxShape.circle
-                                    ),
-                                    child: Center(
-                                        child: Icon(CupertinoIcons.money_dollar)),
+                            child:  Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.lock,
+                                  size: 50,
+                                  color: Colors.red,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "Status",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                      color: mainFontColor
                                   ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      width: (size.width - 90) * 0.7,
-                                      child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Loan",
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  color: black,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                              "Loan for the Car",
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: black.withOpacity(0.5),
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          ]),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            "\$400",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                                color: black),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
+                                )
+                              ],
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              )
+                          Container(
+                            decoration: BoxDecoration(
+                                color: white,
+                                borderRadius: BorderRadius.circular(25),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: grey.withOpacity(0.03),
+                                    spreadRadius: 10,
+                                    blurRadius: 3,
+                                    // changes position of shadow
+                                  ),
+                                ]),
+                            child:  Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.visibility,
+                                  size: 50,
+                                  color: Colors.orangeAccent,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "11-10-2023",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: mainFontColor
+                                  ),
+                                ),
+                                SizedBox(height: 5,),
+                                Text(
+                                  "14:50 PM",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                      color: mainFontColor
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+
+                        ],
+                      )
+                  ),
+                )
+
             ],
           ),
         ));
