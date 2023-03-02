@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iot_project/pages/loginPage.dart';
 import 'homeApp.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
 
-      home: const HomeApp(),
+      home: const LoginPage(),
     );
   }
 }
