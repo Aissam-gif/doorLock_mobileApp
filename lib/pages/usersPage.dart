@@ -63,7 +63,9 @@ class _UsersState extends State<UsersPage> {
         body: getBody()
     );
   }
+
   Widget getBody() {
+    var size = MediaQuery.of(context).size;
     return SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.only(top: 20, left: 5, right: 5),
@@ -85,16 +87,84 @@ class _UsersState extends State<UsersPage> {
                   itemBuilder: (context, index) {
                     final isAllowedColor = filtredUsers[index].allowed ? Colors.green : Colors.red;
                     final String isAllowedText = filtredUsers[index].allowed ? 'Allowed' : 'Not Allowed';
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(filtredUsers[index].profilePictureUrl),
-                      ),
+                    return  ListTile(
                       title: Row(
                         children: [
-                          Text(filtredUsers[index].fullName),
-                          SizedBox(width: 8),
-                          Text(isAllowedText, style: TextStyle(fontWeight: FontWeight.bold)),
-                          Icon(Icons.circle, color: isAllowedColor,)
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                top: 10,
+                                left: 10,
+                                right: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                  color: white,
+                                  borderRadius: BorderRadius.circular(25),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: grey.withOpacity(0.03),
+                                      spreadRadius: 10,
+                                      blurRadius: 3,
+                                      // changes position of shadow
+                                    ),
+                                  ]),
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 10, bottom: 10, right: 20, left: 20),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      child: Center(
+                                          child: CircleAvatar(
+                                            backgroundImage: NetworkImage(filtredUsers[index].profilePictureUrl),
+                                          )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 15,
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        width: (size.width - 90) * 0.7,
+                                        child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                filtredUsers[index].fullName,
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    color: black,
+                                                    fontWeight: FontWeight.bold),
+                                              )
+                                            ]),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Container(
+                                              width: 30,
+                                              height: 30,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(25),
+                                                color: isAllowedColor
+                                              ),
+                                            ),
+
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       onTap: () {
