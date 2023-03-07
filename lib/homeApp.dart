@@ -47,7 +47,47 @@ class _HomeAppState extends State<HomeApp> {
           // height: 30,
           // width: 40,
           child: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(context: context,
+                  builder: (BuildContext context) {
+                return AlertDialog(
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () {
+                          //TODO: Save the user to the database
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          "Add User"
+                        ))
+                  ],
+                    scrollable: true,
+                    title: Text('Add New User'),
+                    content:
+                    Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Form(
+                    child: Column(
+                    children: <Widget>[
+                    TextFormField(
+                    decoration: InputDecoration(
+                    labelText: 'Name',
+                    icon: Icon(Icons.account_box),
+                    ),
+                    ),
+                    TextFormField(
+                    decoration: InputDecoration(
+                    labelText: 'Password',
+                    icon: Icon(Icons.password),
+                    ),
+                    ),
+                    ],
+                    ),
+                    ),
+                )
+                );
+                  });
+            },
             child: Icon(
               Icons.add,
               size: 20,

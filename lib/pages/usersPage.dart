@@ -1,6 +1,29 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:iot_project/main.dart';
 import 'package:iot_project/theme/colors.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:http/http.dart' as http;
+
+Future<List<dynamic>> fetchAlbums() async {
+  final response = await http.get(
+      Uri.parse('http://10.11.3.170:3000/users'),
+    headers: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlsaWFzcyIsInBlcm1pc3Npb25zIjpbImxvY2siLCJ1bmxvY2siXSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjc4MjAwNjY5fQ.dv7tlvRxo2ucA_ZyCZMx8Jn6bx8risht2JT0XKklevo',
+    }
+  );
+
+  if (response.statusCode == 200) {
+    // If the call to the server was successful, parse the JSON
+    List<dynamic> data = jsonDecode(response.body);
+    print(data);
+    return data;
+  } else {
+    // If that call was not successful, throw an error.
+    throw Exception('Failed to load album');
+  }
+}
 
 class User {
   final String fullName;
@@ -34,7 +57,7 @@ class _UsersState extends State<UsersPage> {
       allowed: true,
     ),
     User(
-        fullName: 'Hatim zamel',
+        fullName: 'Hatim ELmharzi',
         profilePictureUrl: 'https://img.freepik.com/free-photo/portrait-good-looking-nordic-unshaven-man-with-fashionable-hairdo-posing_176420-15809.jpg?w=1380&t=st=1677275916~exp=1677276516~hmac=e506cd5791706fd15d73c33097251cc13a98e18902a3b23e3b42f12dc04286d4',
         allowed: false,
     ),
@@ -47,6 +70,7 @@ class _UsersState extends State<UsersPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     filtredUsers = users;
   }
 
@@ -58,6 +82,7 @@ class _UsersState extends State<UsersPage> {
 
   @override
   Widget build(BuildContext context) {
+    fetchAlbums();
     return Scaffold(
         backgroundColor: primary,
         body: getBody()

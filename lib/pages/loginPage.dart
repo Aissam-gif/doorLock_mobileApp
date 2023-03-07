@@ -1,11 +1,34 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:icon_badge/icon_badge.dart';
+import 'package:iot_project/constaints.dart';
 import 'package:iot_project/homeApp.dart';
 import 'package:iot_project/pages/dashboardPage.dart';
 import 'package:iot_project/theme/colors.dart';
+import 'package:http/http.dart' as http;
 
+Future<String> login(String username, String password) async {
+  final response = await http.post(
+      Uri.parse(server+'login'),
+      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
+      body: jsonEncode(<String, String>{
+        'username': username,
+        'password': password,
+      })
+  );
+
+  if (response.statusCode == 200) {
+    // If the call to the server was successful, parse the JSON
+    final token = jsonDecode(response.body);
+    return token;
+  } else {
+    // If that call was not successful, throw an error.
+    throw Exception('Failed to load album');
+  }
+}
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -47,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 width: 70,
                 height: 70,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     image: DecorationImage(
                         image: NetworkImage(
@@ -163,7 +186,9 @@ class _LoginPageState extends State<LoginPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(
+                 print( login(_email.value.toString(), password.value.toString()));
+
+                 Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => HomeApp(),

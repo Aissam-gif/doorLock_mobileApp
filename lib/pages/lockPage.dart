@@ -7,6 +7,16 @@ class Lock {
   bool lockState;
   String lockImage;
 
+  unlock() {
+    this.lockState = true;
+    lockImage = LOCK_OPENED_IMAGE;
+  }
+
+  lock() {
+    this.lockState = false;
+    lockImage = LOCK_CLOSED_IMAGE;
+  }
+
   changeLockState() {
     lockState = !lockState;
     if (lockState == true) {
@@ -115,12 +125,12 @@ class _LockState extends State<LockPage> {
                   ),
                   onChanged: (position) {
                     setState(() {
-                      if (position == SlidableButtonPosition.end) {
-                        lock.changeLockState();
-                        result = 'Lock is opened';
-                      } else if (position != SlidableButtonPosition.sliding){
-                        lock.changeLockState();
+                      if (position == SlidableButtonPosition.start) {
+                        lock.lock();
                         result = 'Lock is closed';
+                      } else if (position == SlidableButtonPosition.end){
+                        lock.unlock();
+                        result = 'Lock is opened';
                       }
                     });
                   },
