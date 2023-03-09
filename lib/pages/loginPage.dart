@@ -6,29 +6,17 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:icon_badge/icon_badge.dart';
 import 'package:iot_project/constaints.dart';
 import 'package:iot_project/homeApp.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:iot_project/pages/dashboardPage.dart';
+import 'package:iot_project/pages/httpRequest.dart';
+import 'package:iot_project/pages/lockPage.dart';
+import 'package:iot_project/pages/usersPage.dart';
 import 'package:iot_project/theme/colors.dart';
 import 'package:http/http.dart' as http;
 
-Future<String> login(String username, String password) async {
-  final response = await http.post(
-      Uri.parse(server+'login'),
-      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
-      body: jsonEncode(<String, String>{
-        'username': username,
-        'password': password,
-      })
-  );
+final storage = new FlutterSecureStorage();
+final authProvider = new AuthenticationProvider();
 
-  if (response.statusCode == 200) {
-    // If the call to the server was successful, parse the JSON
-    final token = jsonDecode(response.body);
-    return token;
-  } else {
-    // If that call was not successful, throw an error.
-    throw Exception('Failed to load album');
-  }
-}
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -42,6 +30,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _email =
   TextEditingController(text: "Username@gmail.com");
   TextEditingController password = TextEditingController(text: "abcdef123456");
+
+
 
   void showPassword() {
     setState(() {
@@ -185,14 +175,24 @@ class _LoginPageState extends State<LoginPage> {
                 height: 50,
               ),
               GestureDetector(
-                onTap: () {
-                 print( login(_email.value.toString(), password.value.toString()));
+                onTap: () async {
 
-                 Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomeApp(),
-                      ));
+                    authProvider.login(_email.text, password.text).then((value) => {
+                      if (value != null) {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeApp(),
+                            ))
+                      } else {
+                        //TODO: when password is wrong
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomeApp(),
+                            ))
+                      }
+                    });
                 },
                 child: Container(
                   padding: EdgeInsets.all(16),

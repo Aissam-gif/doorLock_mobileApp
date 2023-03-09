@@ -1,14 +1,21 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:iot_project/constaints.dart';
+import 'package:iot_project/homeApp.dart';
 import 'package:iot_project/main.dart';
+import 'package:iot_project/models/user_model.dart';
+import 'package:iot_project/pages/httpRequest.dart';
 import 'package:iot_project/theme/colors.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:http/http.dart' as http;
 
-Future<List<dynamic>> fetchAlbums() async {
+
+/*
+Future<bool> fetchUsers() async {
+
   final response = await http.get(
-      Uri.parse('http://10.11.3.170:3000/users'),
+      Uri.parse(server+'users'),
     headers: {
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImlsaWFzcyIsInBlcm1pc3Npb25zIjpbImxvY2siLCJ1bmxvY2siXSwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjc4MjAwNjY5fQ.dv7tlvRxo2ucA_ZyCZMx8Jn6bx8risht2JT0XKklevo',
     }
@@ -24,9 +31,11 @@ Future<List<dynamic>> fetchAlbums() async {
     throw Exception('Failed to load album');
   }
 }
-
+*/
 class User {
-  final String fullName;
+  final String id;
+  final String username;
+  final List<String> permissions;
   final String profilePictureUrl;
   bool allowed;
 
@@ -34,7 +43,7 @@ class User {
     allowed = !allowed;
   }
 
-  User({required this.fullName, required this.profilePictureUrl, required this.allowed});
+  User({required this.id,required this.username, required this.profilePictureUrl, required this.allowed, required this.permissions});
 }
 
 class UsersPage extends StatefulWidget {
@@ -44,52 +53,126 @@ class UsersPage extends StatefulWidget {
   State<UsersPage> createState() => _UsersState();
 }
 
+
+
 class _UsersState extends State<UsersPage> {
-  final List<User> users = [
+
+   List<UserModel> users = [
+    /*
     User(
-        fullName: 'Aissam Boussoufiane',
+        username: 'Aissam Boussoufiane',
         profilePictureUrl: 'https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?w=1060&t=st=1677275370~exp=1677275970~hmac=11c7e160ba4de52cd2255bdc2a115ef1811746dc9070b55c497507e8e953e182',
         allowed: true,
     ),
     User(
-        fullName: 'Iliyas Essouiry',
+        username: 'Iliyas Essouiry',
         profilePictureUrl: 'https://img.freepik.com/premium-photo/portrait-young-man-white-backdrop_23-2148043786.jpg?w=1380',
       allowed: true,
     ),
     User(
-        fullName: 'Hatim ELmharzi',
+        username: 'Hatim ELmharzi',
         profilePictureUrl: 'https://img.freepik.com/free-photo/portrait-good-looking-nordic-unshaven-man-with-fashionable-hairdo-posing_176420-15809.jpg?w=1380&t=st=1677275916~exp=1677276516~hmac=e506cd5791706fd15d73c33097251cc13a98e18902a3b23e3b42f12dc04286d4',
         allowed: false,
     ),
+
+     */
   ];
 
   final TextEditingController filterController = TextEditingController();
-  List<User> filtredUsers = [];
+  List<UserModel> filtredUsers = [];
+
+   Future<List<UserModel>> getUsersApi() async {
+     final response = await http.get(Uri.parse('https://mocki.io/v1/e15ed5ae-ec09-4e8d-9dfb-acae61218ee7')) ;
+     var data = jsonDecode(response.body.toString());
+     print(data);
+     if(response.statusCode == 200){
+       users.clear();
+       int index = 0;
+       for(Map i in data){
+         users.add(UserModel.fromJson(i));
+         print(UserModel.fromJson(i).username);
+       }
+       return users ;
+     }else {
+       return users ;
+     }
+   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     filtredUsers = users;
+    // filtredUsers = users;
+    // loadData();
+   // getUsersApi();
   }
 
-  void filterUsersByName(String _fullName) {
+
+  Future<void> loadData() async {
+    // Load your data here
+    dynamic fetchedData = AuthenticationProvider.getApiRequest('users', {});
+    print(fetchedData[0]);
+    List<UserModel> newUsers = [];
+    for(int i=0; i<fetchedData.length;i++) {
+      /* Map<String, dynamic> userData =  fetchedData[i];
+      print(fetchedData[i]);
+      users.add(User(id: userData['id'], username: userData['username'], profilePictureUrl: '', allowed: true, permissions: userData['permission']));
+    */
+    }
+
+    print(users);
     setState(() {
-      filtredUsers = users.where((user) => user.fullName.toLowerCase().contains(_fullName.toLowerCase())).toList();
+     users = newUsers;
     });
   }
 
+  void filterUsersByName(String username) {
+    setState(() {
+       filtredUsers = users.where((user) => user.username!.toLowerCase().contains(username.toLowerCase())).toList();
+    });
+  }
+  void printHello() {
+    print('HATIM ZAMEL');
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    fetchAlbums();
+   // fetchAlbums();
+
     return Scaffold(
         backgroundColor: primary,
         body: getBody()
     );
+    /*
+    return FutureBuilder<String>(
+      future: AuthenticationProvider.getApiRequest('users', {}),
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          print(snapshot.data);
+          return Scaffold(
+              backgroundColor: primary,
+              body: getBody()
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    );
+    return Scaffold(
+        backgroundColor: primary,
+        body: getBody()
+    );
+
+     */
   }
 
   Widget getBody() {
+   /* dynamic response = AuthenticationProvider.getApiRequest('users', {});
+    print(response);
+
+    */
     var size = MediaQuery.of(context).size;
     return SafeArea(
         child: SingleChildScrollView(
@@ -106,102 +189,116 @@ class _UsersState extends State<UsersPage> {
                   ),
                 ),
               Container(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: filtredUsers.length,
-                  itemBuilder: (context, index) {
-                    final isAllowedColor = filtredUsers[index].allowed ? Colors.green : Colors.red;
-                    final String isAllowedText = filtredUsers[index].allowed ? 'Allowed' : 'Not Allowed';
-                    return  ListTile(
-                      title: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.only(
-                                top: 10,
-                                left: 10,
-                                right: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                  color: white,
-                                  borderRadius: BorderRadius.circular(25),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: grey.withOpacity(0.03),
-                                      spreadRadius: 10,
-                                      blurRadius: 3,
-                                      // changes position of shadow
+                child: FutureBuilder(
+                  future: getUsersApi(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return CircularProgressIndicator(
+                        backgroundColor: primary,
+                      );
+                    } else {
+                      return   ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: filtredUsers.length,
+                        itemBuilder: (context, index) {
+                          final isAllowedColor = filtredUsers[index].allowed ?? false  ? Colors.green : Colors.red;
+                          final String isAllowedText = filtredUsers[index].allowed ?? false ? 'Allowed' : 'Not Allowed';
+                          return  ListTile(
+                            title: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    margin: EdgeInsets.only(
+                                      top: 10,
+                                      left: 10,
+                                      right: 10,
                                     ),
-                                  ]),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 10, bottom: 10, right: 20, left: 20),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      child: Center(
-                                          child: CircleAvatar(
-                                            backgroundImage: NetworkImage(filtredUsers[index].profilePictureUrl),
-                                          )
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 15,
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        width: (size.width - 90) * 0.7,
-                                        child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                filtredUsers[index].fullName,
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: black,
-                                                    fontWeight: FontWeight.bold),
-                                              )
-                                            ]),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(
+                                    decoration: BoxDecoration(
+                                        color: white,
+                                        borderRadius: BorderRadius.circular(25),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: grey.withOpacity(0.03),
+                                            spreadRadius: 10,
+                                            blurRadius: 3,
+                                            // changes position of shadow
+                                          ),
+                                        ]),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10, bottom: 10, right: 20, left: 20),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            child: Center(
+                                                child:  Icon(
+                                                  Icons.person,
+                                                  size: 40,
+                                                  color: Colors.orangeAccent,
+                                                )
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 15,
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              width: (size.width - 90) * 0.7,
+                                              child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      filtredUsers[index].username ?? '',
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          color: black,
+                                                          fontWeight: FontWeight.bold),
+                                                    )
+                                                  ]),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(
 
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.end,
-                                          children: [
-                                            Container(
-                                              width: 30,
-                                              height: 30,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(25),
-                                                color: isAllowedColor
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                children: [
+                                                  Container(
+                                                    width: 30,
+                                                    height: 30,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(25),
+                                                        color: isAllowedColor
+                                                    ),
+                                                  ),
+
+                                                ],
                                               ),
                                             ),
-
-                                          ],
-                                        ),
+                                          )
+                                        ],
                                       ),
-                                    )
-                                  ],
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => UserPage(user: filtredUsers[index]),
-                            ));
-                      },
-                    );
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => UserPage(user: filtredUsers[index]),
+                                  ));
+                            },
+                          );
+                        },
+                      );
+                    }
                   },
-                ),
+                )
+              ,
               )
             ],
           ),
@@ -213,7 +310,7 @@ class _UsersState extends State<UsersPage> {
 
 
 class UserPage extends StatefulWidget {
-  final User user;
+  final UserModel user;
 
   const UserPage({Key? key, required this.user}) : super(key: key);
 
@@ -225,25 +322,27 @@ class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
 
-    String changeUserPrivilege = widget.user.allowed ? 'Not Allowed' : 'Allowed';
-    Color isAllowedColor = widget.user.allowed ? Colors.green : Colors.red;
+    String changeUserPrivilege = widget.user.allowed ?? false ? 'Not Allowed' : 'Allowed';
+    Color isAllowedColor = widget.user.allowed ?? false ? Colors.green : Colors.red;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.user.fullName),
+        title: Text(widget.user.username ?? ''),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(widget.user.profilePictureUrl),
+            Icon(
+              Icons.person,
+              size: 40,
+              color: Colors.orangeAccent,
             ),
             SizedBox(height: 16),
-            Text(widget.user.fullName, style: TextStyle(fontSize: 30)),
+            Text(widget.user.username ?? '', style: TextStyle(fontSize: 30)),
             ElevatedButton(
               onPressed: () {
                   setState(() {
-                    widget.user.changePrivelege();
+                    widget.user.changePrivilege();
                   });
                 },
               child: Text('Change to ' + changeUserPrivilege),
