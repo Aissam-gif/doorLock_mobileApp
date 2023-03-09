@@ -8,13 +8,12 @@
 /// company : {"name":"Romaguera-Crona","catchPhrase":"Multi-layered client-server neural-net","bs":"harness real-time e-markets"}
 
 class UserModel {
-  UserModel({
-    int? id,
-    String? username,
-    String? password,
-    bool? allowed,
-    String? role
-  }){
+  UserModel(
+      {int? id,
+      String? username,
+      String? password,
+      bool? allowed,
+      String? role}) {
     _id = id;
     _username = username;
     _password = password;
@@ -35,7 +34,6 @@ class UserModel {
   String? _role;
   bool? _allowed;
 
-
   changePrivilege() {
     if (_allowed == null || _allowed == false) {
       _allowed = true;
@@ -44,11 +42,19 @@ class UserModel {
     }
   }
 
+  bool isAdmin() {
+    if (_role?.toLowerCase() == "admin") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   int? get id => _id;
   String? get username => _username;
   String? get role => _role;
   String? get password => _password;
-  bool? get allowed =>  _allowed;
+  bool? get allowed => _allowed;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -59,7 +65,4 @@ class UserModel {
     map['allowed'] = _allowed;
     return map;
   }
-
 }
-
-
