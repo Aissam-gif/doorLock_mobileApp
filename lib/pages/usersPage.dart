@@ -79,7 +79,7 @@ class _UsersState extends State<UsersPage> {
 
   Future<List<UserModel>> getUsersApi() async {
     final response = await http.get(
-        Uri.parse('https://mocki.io/v1/e15ed5ae-ec09-4e8d-9dfb-acae61218ee7'));
+        Uri.parse('https://mocki.io/v1/6e540c9a-ffb5-4efc-87b4-e12cf978a26c'));
     var data = jsonDecode(response.body.toString());
     print(data);
     if (response.statusCode == 200) {
@@ -272,9 +272,9 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  String firstName = "";
-  String lastName = "";
-  String bodyTemp = "";
+  String username = "";
+  String password = "";
+  String role = "";
   var measure;
 
   @override
@@ -330,13 +330,13 @@ class _UserPageState extends State<UserPage> {
                     initialValue: widget.user.username,
                     onFieldSubmitted: (value) {
                       setState(() {
-                        firstName = value.toUpperCase();
+                        username = value.toUpperCase();
                         // firstNameList.add(firstName);
                       });
                     },
                     onChanged: (value) {
                       setState(() {
-                        firstName = value.toUpperCase();
+                        username = value.toUpperCase();
                       });
                     },
                     validator: (value) {
@@ -367,13 +367,13 @@ class _UserPageState extends State<UserPage> {
                         border: OutlineInputBorder()),
                     onFieldSubmitted: (value) {
                       setState(() {
-                        firstName = value.toUpperCase();
+                        password = value.toUpperCase();
                         // firstNameList.add(firstName);
                       });
                     },
                     onChanged: (value) {
                       setState(() {
-                        firstName = value.toUpperCase();
+                        password = value.toUpperCase();
                       });
                     },
                     validator: (value) {
@@ -412,13 +412,13 @@ class _UserPageState extends State<UserPage> {
                       hint: const Text("Change role"),
                       onChanged: (value) {
                         setState(() {
-                          measure = value;
+                          // role = value.toString();
                           // measureList.add(measure);
                         });
                       },
                       onSaved: (value) {
                         setState(() {
-                          measure = value;
+                          // role = value.toString();
                         });
                       }),
                 ),
@@ -434,7 +434,10 @@ class _UserPageState extends State<UserPage> {
                     onPressed: () {
                       // Validate returns true if the form is valid, or false otherwise.
                       if (_formKey.currentState!.validate()) {
-                        // _submit();
+                        widget.user.setRole(role);
+                        widget.user.setUsername(username);
+                        widget.user.setPassword(password);
+                        // AuthenticationProvider.updateUser(widget.user);
                       }
                     },
                     child: const Text("Submit"),

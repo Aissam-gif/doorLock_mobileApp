@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:iot_project/constaints.dart';
 import 'package:iot_project/models/user_model.dart';
@@ -19,8 +18,8 @@ class AuthenticationProvider {
     try {
       dynamic response = await makeAuthenticationRequest(username, password);
       _token = response['token'];
-      print('_token = '+ _token!);
-    } on Exception catch(_) {
+      print('_token = ' + _token!);
+    } on Exception catch (_) {
       return null;
     }
     return _token;
@@ -30,17 +29,15 @@ class AuthenticationProvider {
     _token = token;
   }
 
-  Future<dynamic> makeAuthenticationRequest(String username,
-      String password) async {
+  Future<dynamic> makeAuthenticationRequest(
+      String username, String password) async {
     final response = await http.post(
       Uri.parse(server + 'login'),
       headers: <String, String>{
         "Content-Type": "application/json",
       },
-      body: jsonEncode(<String, String>{
-        "username": username,
-        "password": password
-      }),
+      body: jsonEncode(
+          <String, String>{"username": username, "password": password}),
     );
 
     if (response.statusCode == 200) {
@@ -55,12 +52,10 @@ class AuthenticationProvider {
     }
   }
 
-
-  static Future<dynamic>  getApiRequest(String url, Map jsonMap) async {
-    final response = await http.get(Uri.parse(server+url),
-        headers: {
-          'Authorization': 'Bearer '+ _token!,
-        });
+  static Future<dynamic> getApiRequest(String url, Map jsonMap) async {
+    final response = await http.get(Uri.parse(server + url), headers: {
+      'Authorization': 'Bearer ' + _token!,
+    });
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -87,12 +82,33 @@ class AuthenticationProvider {
     return reply;
   }
 
+  static Future<UserModel> updateUser(UserModel userModel) async {
+    final response = await http.put(
+      Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id': userModel.id as String,
+        'username': userModel.username as String,
+        'role': userModel.role as String,
+        'allowed': userModel.allowed as String
+      }),
+    );
 
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return UserModel.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to update User.');
+    }
+  }
 
   void logout() {
     // Clear the stored token
     _token = null;
-
-
   }
 }

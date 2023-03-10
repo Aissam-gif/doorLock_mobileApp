@@ -65,4 +65,24 @@ class UserModel {
     map['allowed'] = _allowed;
     return map;
   }
+
+  void setId(int id) {
+    _id = id;
+  }
+
+  void setRole(String role) {
+    _role = role;
+  }
+
+  void setUsername(String username) {
+    _username = username;
+  }
+
+  void setPassword(String password) {
+    _password = password;
+  }
+
+  void setAllowed(bool allowed) {
+    _allowed = allowed;
+  }
 }
