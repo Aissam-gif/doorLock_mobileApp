@@ -8,15 +8,35 @@ import 'package:iot_project/pages/loginPage.dart';
 
 class AuthenticationProvider {
   static String? _token;
+  static UserModel? _user;
 
-  String? get token => _token;
+  static String? get token => _token;
+
+  static UserModel? get user => _user;
 
   bool get isAuthenticated => _token != null;
+
+  static void setUser(UserModel user) {
+    _user = user;
+  }
 
   Future<String?> login(String username, String password) async {
     // Make the authentication request and store the token
     try {
       dynamic response = await makeAuthenticationRequest(username, password);
+      _token = response['token'];
+      print('_token = ' + _token!);
+    } on Exception catch (_) {
+      return null;
+    }
+    return _token;
+  }
+
+  Future<String?> mockLogin(String username, String password) async {
+    // Make the authentication request and store the token
+    try {
+      dynamic response =
+          await makeMockAuthenticationRequest(username, password);
       _token = response['token'];
       print('_token = ' + _token!);
     } on Exception catch (_) {
@@ -44,6 +64,25 @@ class AuthenticationProvider {
       // If the call to the server was successful, parse the JSON
       final responseResult = jsonDecode(response.body);
       print(responseResult);
+      await storage.write(key: 'jwt', value: responseResult['token']);
+      return await responseResult;
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load album');
+    }
+  }
+
+  Future<dynamic> makeMockAuthenticationRequest(
+      String username, String password) async {
+    final response = await http.get(
+        Uri.parse('https://mocki.io/v1/dba0c4e2-bd9a-4c1f-9797-6bd5cee26099'),
+        headers: <String, String>{
+          "Content-Type": "application/json",
+        });
+
+    if (response.statusCode == 200) {
+      // If the call to the server was successful, parse the JSON
+      final responseResult = jsonDecode(response.body);
       await storage.write(key: 'jwt', value: responseResult['token']);
       return await responseResult;
     } else {

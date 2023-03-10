@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iot_project/constaints.dart';
+import 'package:iot_project/models/user_model.dart';
 import 'package:iot_project/pages/httpRequest.dart';
 import 'package:iot_project/theme/colors.dart';
 import 'package:slidable_button/slidable_button.dart';
@@ -55,6 +56,8 @@ class _LockState extends State<LockPage> {
 
   Widget getBody() {
     var lockColor = _lock.lockState ? red : green;
+    UserModel? user = AuthenticationProvider.user;
+    // user = JwtDecoder.decode(storage.read(key: 'decodedJWT').toString());
     return SafeArea(
       child: Center(
         child: Column(
@@ -127,22 +130,26 @@ class _LockState extends State<LockPage> {
                 ),
                 onChanged: (position) {
                   setState(() {
-                    if (position == SlidableButtonPosition.start) {
-                      AuthenticationProvider
-                          .getMockApiRequest(
-                              "https://mocki.io/v1/cbec8b3f-1f67-409d-87f9-4b20ce5ece03",
-                              {}).then((value) => {
-                            if (value != null)
-                              {lock(), result = 'Lock is closed'}
-                          });
-                    } else if (position == SlidableButtonPosition.end) {
-                      AuthenticationProvider
-                          .getMockApiRequest(
-                              "https://mocki.io/v1/97b2222d-9f27-4967-b416-fccd0e94d74d",
-                              {}).then((value) => {
-                            if (value != null)
-                              {unlock(), result = 'Lock is opened'}
-                          });
+                    if (user!.allowed == false) {
+                      result = 'You are not allowed to Open Or Close The Lock';
+                    } else {
+                      if (position == SlidableButtonPosition.start) {
+                        AuthenticationProvider
+                            .getMockApiRequest(
+                                "https://mocki.io/v1/cbec8b3f-1f67-409d-87f9-4b20ce5ece03",
+                                {}).then((value) => {
+                              if (value != null)
+                                {lock(), result = 'Lock is closed'}
+                            });
+                      } else if (position == SlidableButtonPosition.end) {
+                        AuthenticationProvider
+                            .getMockApiRequest(
+                                "https://mocki.io/v1/97b2222d-9f27-4967-b416-fccd0e94d74d",
+                                {}).then((value) => {
+                              if (value != null)
+                                {unlock(), result = 'Lock is opened'}
+                            });
+                      }
                     }
                   });
                 },
@@ -151,6 +158,22 @@ class _LockState extends State<LockPage> {
             Text(
               result,
               style: TextStyle(color: lockColor, fontSize: 16),
+            ),
+            SizedBox(height: 20),
+            Container(
+              width: 50,
+              height: 50,
+              child: user!.allowed == true
+                  ? Icon(
+                      Icons.verified,
+                      size: 50,
+                      color: Colors.green,
+                    )
+                  : Icon(
+                      Icons.dangerous,
+                      size: 50,
+                      color: red,
+                    ),
             ),
           ],
         ),
