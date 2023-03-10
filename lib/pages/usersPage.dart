@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:iot_project/models/user_model.dart';
+import 'package:iot_project/pages/httpRequest.dart';
 import 'package:iot_project/theme/colors.dart';
 
 /*
@@ -26,24 +27,6 @@ Future<bool> fetchUsers() async {
   }
 }
 */
-class User {
-  final String id;
-  final String username;
-  final List<String> permissions;
-  final String profilePictureUrl;
-  bool allowed;
-
-  changePrivelege() {
-    allowed = !allowed;
-  }
-
-  User(
-      {required this.id,
-      required this.username,
-      required this.profilePictureUrl,
-      required this.allowed,
-      required this.permissions});
-}
 
 class UsersPage extends StatefulWidget {
   const UsersPage({Key? key}) : super(key: key);
@@ -53,26 +36,7 @@ class UsersPage extends StatefulWidget {
 }
 
 class _UsersState extends State<UsersPage> {
-  List<UserModel> users = [
-    /*
-    User(
-        username: 'Aissam Boussoufiane',
-        profilePictureUrl: 'https://img.freepik.com/free-photo/portrait-white-man-isolated_53876-40306.jpg?w=1060&t=st=1677275370~exp=1677275970~hmac=11c7e160ba4de52cd2255bdc2a115ef1811746dc9070b55c497507e8e953e182',
-        allowed: true,
-    ),
-    User(
-        username: 'Iliyas Essouiry',
-        profilePictureUrl: 'https://img.freepik.com/premium-photo/portrait-young-man-white-backdrop_23-2148043786.jpg?w=1380',
-      allowed: true,
-    ),
-    User(
-        username: 'Hatim ELmharzi',
-        profilePictureUrl: 'https://img.freepik.com/free-photo/portrait-good-looking-nordic-unshaven-man-with-fashionable-hairdo-posing_176420-15809.jpg?w=1380&t=st=1677275916~exp=1677276516~hmac=e506cd5791706fd15d73c33097251cc13a98e18902a3b23e3b42f12dc04286d4',
-        allowed: false,
-    ),
-
-     */
-  ];
+  List<UserModel> users = [];
 
   final TextEditingController filterController = TextEditingController();
   List<UserModel> filtredUsers = [];
@@ -437,7 +401,7 @@ class _UserPageState extends State<UserPage> {
                         widget.user.setRole(role);
                         widget.user.setUsername(username);
                         widget.user.setPassword(password);
-                        // AuthenticationProvider.updateUser(widget.user);
+                        AuthenticationProvider.updateUser(widget.user);
                       }
                     },
                     child: const Text("Submit"),

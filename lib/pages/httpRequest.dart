@@ -70,6 +70,24 @@ class AuthenticationProvider {
     }
   }
 
+  static Future<dynamic> getMockApiRequest(String url, Map jsonMap) async {
+    final response = await http.get(Uri.parse(url), headers: {
+      'Authorization': 'Bearer ${await storage.read(key: 'jwt').toString()}',
+    });
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      dynamic data = jsonDecode(response.body);
+      print(data);
+      return data;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
+
   Future<String> putApiRequest(String url, Map jsonMap) async {
     HttpClient httpClient = new HttpClient();
     HttpClientRequest request = await httpClient.postUrl(Uri.parse(url));
@@ -87,9 +105,10 @@ class AuthenticationProvider {
       Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ' + _token!,
       },
       body: jsonEncode(<String, String>{
-        'id': userModel.id as String,
+        'id': userModel.id.toString(),
         'username': userModel.username as String,
         'role': userModel.role as String,
         'allowed': userModel.allowed as String
