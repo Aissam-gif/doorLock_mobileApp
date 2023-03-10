@@ -20,14 +20,21 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool passwordVisible = true;
-  TextEditingController _email =
-      TextEditingController(text: "Username@gmail.com");
-  TextEditingController password = TextEditingController(text: "abcdef123456");
+  TextEditingController _email = TextEditingController(text: "iliass");
+  TextEditingController password = TextEditingController(text: "somepassword");
+
+  String error = '';
 
   void showPassword() {
     setState(() {
       print('test');
       passwordVisible = !passwordVisible;
+    });
+  }
+
+  showError() {
+    setState(() {
+      error = 'Error Login';
     });
   }
 
@@ -41,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget getBody() {
     Map<String, dynamic> decodedToken;
     var size = MediaQuery.of(context).size;
-    String error = '';
+
     return SafeArea(
         child: Center(
       child: Column(
@@ -165,14 +172,17 @@ class _LoginPageState extends State<LoginPage> {
           ),
           GestureDetector(
             onTap: () async {
+              print(_email.text + ' ' + password.text);
               authProvider
-                  .mockLogin(_email.text, password.text)
+                  .login(_email.text, password.text)
                   .then((value) async => {
                         if (value != null)
                           {
                             decodedToken = JwtDecoder.decode(value),
                             AuthenticationProvider.setUser(
                                 UserModel.fromJson(decodedToken)),
+                            print(AuthenticationProvider.user!.username
+                                .toString()),
                             if (decodedToken['role'] == "admin")
                               {
                                 Navigator.pushReplacement(
@@ -192,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         else
                           {
-                            error = 'Error Login',
+                            showError(),
                           }
                       });
             },

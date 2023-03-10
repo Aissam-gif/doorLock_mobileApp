@@ -42,13 +42,12 @@ class _UsersState extends State<UsersPage> {
   List<UserModel> filtredUsers = [];
 
   Future<List<UserModel>> getUsersApi() async {
-    final response = await http.get(
-        Uri.parse('https://mocki.io/v1/6e540c9a-ffb5-4efc-87b4-e12cf978a26c'));
+    final response = await http.get(Uri.parse('http://10.0.2.2:3000/users'),
+        headers: {'Authorization': 'Bearer ${AuthenticationProvider.token}'});
     var data = jsonDecode(response.body.toString());
     print(data);
     if (response.statusCode == 200) {
       users.clear();
-      int index = 0;
       for (Map i in data) {
         users.add(UserModel.fromJson(i));
         print(UserModel.fromJson(i).username);
@@ -294,13 +293,13 @@ class _UserPageState extends State<UserPage> {
                     initialValue: widget.user.username,
                     onFieldSubmitted: (value) {
                       setState(() {
-                        username = value.toUpperCase();
+                        username = value;
                         // firstNameList.add(firstName);
                       });
                     },
                     onChanged: (value) {
                       setState(() {
-                        username = value.toUpperCase();
+                        username = value;
                       });
                     },
                     validator: (value) {
@@ -331,13 +330,13 @@ class _UserPageState extends State<UserPage> {
                         border: OutlineInputBorder()),
                     onFieldSubmitted: (value) {
                       setState(() {
-                        password = value.toUpperCase();
+                        password = value;
                         // firstNameList.add(firstName);
                       });
                     },
                     onChanged: (value) {
                       setState(() {
-                        password = value.toUpperCase();
+                        password = value;
                       });
                     },
                     validator: (value) {
@@ -366,18 +365,26 @@ class _UserPageState extends State<UserPage> {
                       items: [
                         const DropdownMenuItem(
                           child: Text("Admin"),
-                          value: 1,
+                          value: 0,
                         ),
                         const DropdownMenuItem(
                           child: Text("User"),
-                          value: 2,
+                          value: 1,
                         )
                       ],
                       hint: const Text("Change role"),
                       onChanged: (value) {
                         setState(() {
-                          // role = value.toString();
-                          // measureList.add(measure);
+                          if (value == 0) {
+                            role = "admin";
+                          } else if (value == 1) {
+                            role = "user";
+                          } else {
+                            if (AuthenticationProvider.user?.role != null) {
+                              role =
+                                  AuthenticationProvider.user!.role.toString();
+                            }
+                          }
                         });
                       },
                       onSaved: (value) {
@@ -398,9 +405,15 @@ class _UserPageState extends State<UserPage> {
                     onPressed: () {
                       // Validate returns true if the form is valid, or false otherwise.
                       if (_formKey.currentState!.validate()) {
-                        widget.user.setRole(role);
-                        widget.user.setUsername(username);
-                        widget.user.setPassword(password);
+                        if (role != '') {
+                          widget.user.setRole(role);
+                        }
+                        if (username != '') {
+                          widget.user.setUsername(username);
+                        }
+                        if (password != '') {
+                          widget.user.setPassword(password);
+                        }
                         AuthenticationProvider.updateUser(widget.user);
                       }
                     },

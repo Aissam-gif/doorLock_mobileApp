@@ -59,7 +59,7 @@ class AuthenticationProvider {
       body: jsonEncode(
           <String, String>{"username": username, "password": password}),
     );
-
+    print(jsonDecode(response.body));
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON
       final responseResult = jsonDecode(response.body);
@@ -75,7 +75,7 @@ class AuthenticationProvider {
   Future<dynamic> makeMockAuthenticationRequest(
       String username, String password) async {
     final response = await http.get(
-        Uri.parse('https://mocki.io/v1/dba0c4e2-bd9a-4c1f-9797-6bd5cee26099'),
+        Uri.parse('https://mocki.io/v1/e8a9e8f6-6fe3-472c-bdee-e931851e9ac8'),
         headers: <String, String>{
           "Content-Type": "application/json",
         });
@@ -141,19 +141,20 @@ class AuthenticationProvider {
 
   static Future<UserModel> updateUser(UserModel userModel) async {
     final response = await http.put(
-      Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
+      Uri.parse(server + 'update/' + userModel.id.toString()),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ' + _token!,
+        'Authorization': 'Bearer ${token}',
       },
-      body: jsonEncode(<String, String>{
+      body: jsonEncode(<String, dynamic>{
         'id': userModel.id.toString(),
-        'username': userModel.username as String,
-        'role': userModel.role as String,
-        'allowed': userModel.allowed as String
+        'username': userModel.username.toString(),
+        'role': userModel.role.toString(),
+        'allowed': userModel.allowed,
+        'password': userModel.password
       }),
     );
-
+    print(jsonDecode(response.body).toString());
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
