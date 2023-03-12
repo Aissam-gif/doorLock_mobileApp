@@ -72,7 +72,47 @@ class AuthenticationProvider {
     }
   }
 
-  Future<dynamic> makeMockAuthenticationRequest(
+  static Future<dynamic> addUser(
+      String username, String password, String role, bool allowed) async {
+    final response = await http.post(
+      Uri.parse(server + 'add'),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer ${token}'
+      },
+      body: jsonEncode(<String, dynamic>{
+        "username": username,
+        "password": password,
+        "role": role,
+        "allowed": allowed
+      }),
+    );
+    print(jsonDecode(response.body));
+    if (response.statusCode == 200) {
+      // If the call to the server was successful, parse the JSON
+      final responseResult = jsonDecode(response.body);
+      print(responseResult);
+      await storage.write(key: 'jwt', value: responseResult['token']);
+      return await responseResult;
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception('Failed to load album');
+    }
+  }
+
+  static Future<dynamic> getLockState() async {
+    final response = await http.get(Uri.parse(server + '/lockState'),
+        headers: {'Authorization': 'Bearer ${AuthenticationProvider.token}'});
+    var data = jsonDecode(response.body.toString());
+    print(data["message"]);
+    if (response.statusCode == 200) {
+      return data;
+    } else {
+      return data;
+    }
+  }
+
+  Future<UserModel> makeMockAuthenticationRequest(
       String username, String password) async {
     final response = await http.get(
         Uri.parse('https://mocki.io/v1/e8a9e8f6-6fe3-472c-bdee-e931851e9ac8'),
@@ -83,11 +123,11 @@ class AuthenticationProvider {
     if (response.statusCode == 200) {
       // If the call to the server was successful, parse the JSON
       final responseResult = jsonDecode(response.body);
-      await storage.write(key: 'jwt', value: responseResult['token']);
-      return await responseResult;
+      print('ADDING USER SUCCESS : ' + responseResult);
+      return await UserModel.fromJson(responseResult);
     } else {
       // If that call was not successful, throw an error.
-      throw Exception('Failed to load album');
+      throw Exception('Failed to load User');
     }
   }
 
@@ -100,12 +140,24 @@ class AuthenticationProvider {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       dynamic data = jsonDecode(response.body);
-      print(data);
+      // print(data['message']);
       return data;
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load album');
+    }
+  }
+
+  static Future<dynamic> changeLockState(String action) async {
+    final response = await http.get(Uri.parse(server + action),
+        headers: {'Authorization': 'Bearer ${AuthenticationProvider.token}'});
+    var data = jsonDecode(response.body.toString());
+    print(data);
+    if (response.statusCode == 200) {
+      return data;
+    } else {
+      return data;
     }
   }
 

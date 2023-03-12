@@ -134,21 +134,17 @@ class _LockState extends State<LockPage> {
                       result = 'You are not allowed to Open Or Close The Lock';
                     } else {
                       if (position == SlidableButtonPosition.start) {
-                        AuthenticationProvider
-                            .getMockApiRequest(
-                                "https://mocki.io/v1/cbec8b3f-1f67-409d-87f9-4b20ce5ece03",
-                                {}).then((value) => {
-                              if (value != null)
-                                {lock(), result = 'Lock is closed'}
-                            });
+                        AuthenticationProvider.changeLockState("lock")
+                            .then((value) => {
+                                  if (value != null)
+                                    {lock(), result = 'Lock is closed'}
+                                });
                       } else if (position == SlidableButtonPosition.end) {
-                        AuthenticationProvider
-                            .getMockApiRequest(
-                                "https://mocki.io/v1/97b2222d-9f27-4967-b416-fccd0e94d74d",
-                                {}).then((value) => {
-                              if (value != null)
-                                {unlock(), result = 'Lock is opened'}
-                            });
+                        AuthenticationProvider.changeLockState("unlock")
+                            .then((value) => {
+                                  if (value != null)
+                                    {unlock(), result = 'Lock is opened'}
+                                });
                       }
                     }
                   });

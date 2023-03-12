@@ -1,32 +1,28 @@
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iot_project/pages/httpRequest.dart';
 import 'package:iot_project/pages/settingsPage.dart';
 import 'package:iot_project/theme/colors.dart';
+
 import 'pages/dashboardPage.dart';
 import 'pages/lockPage.dart';
 import 'pages/usersPage.dart';
-import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-
-
 
 class HomeApp extends StatefulWidget {
   const HomeApp({Key? key}) : super(key: key);
 
   @override
   _HomeAppState createState() => _HomeAppState();
-
-
-  }
-
-
+}
 
 class _HomeAppState extends State<HomeApp> {
   int selectedPage = 0;
   static const List<Widget> pages = <Widget>[
-      DashboardPage(),
-      LockPage(),
-      UsersPage(),
-      SettingsPage()
+    DashboardPage(),
+    LockPage(),
+    UsersPage(),
+    SettingsPage()
   ];
 
   void onItemTapped(int index) {
@@ -34,11 +30,14 @@ class _HomeAppState extends State<HomeApp> {
       selectedPage = index;
       print('Pressed ${index}');
     });
-}
-
+  }
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController _username = TextEditingController(text: "");
+    TextEditingController _password = TextEditingController(text: "");
+    String error = '';
+
     return Scaffold(
       backgroundColor: primary,
       body: getBody(),
@@ -49,44 +48,63 @@ class _HomeAppState extends State<HomeApp> {
           // width: 40,
           child: FloatingActionButton(
             onPressed: () {
-              showDialog(context: context,
+              showDialog(
+                  context: context,
                   builder: (BuildContext context) {
-                return AlertDialog(
-                  actions: [
-                    ElevatedButton(
-                        onPressed: () {
-                          //TODO: Save the user to the database
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          "Add User"
-                        ))
-                  ],
-                    scrollable: true,
-                    title: Text('Add New User'),
-                    content:
-                    Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Form(
-                    child: Column(
-                    children: <Widget>[
-                    TextFormField(
-                    decoration: InputDecoration(
-                    labelText: 'Name',
-                    icon: Icon(Icons.account_box),
-                    ),
-                    ),
-                    TextFormField(
-                    decoration: InputDecoration(
-                    labelText: 'Password',
-                    icon: Icon(Icons.password),
-                    ),
-                    ),
-                    ],
-                    ),
-                    ),
-                )
-                );
+                    return AlertDialog(
+                        actions: [
+                          ElevatedButton(
+                              onPressed: () {
+                                //TODO: Save the user to the database
+                                if (_username.text != '' &&
+                                    _password.text != '') {
+                                  AuthenticationProvider.addUser(_username.text,
+                                          _password.text, 'user', false)
+                                      .then((value) => {
+                                            if (value != null)
+                                              {
+                                                _username.text = '',
+                                                _password.text = '',
+                                                Navigator.pop(context),
+                                              }
+                                          });
+                                } else {
+                                  error = 'Please fill out the form';
+                                }
+                              },
+                              child: Text("Add User"))
+                        ],
+                        scrollable: true,
+                        title: Text('Add New User'),
+                        content: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Form(
+                            child: Column(
+                              children: <Widget>[
+                                TextFormField(
+                                  controller: _username,
+                                  decoration: InputDecoration(
+                                    labelText: 'Name',
+                                    icon: Icon(Icons.account_box),
+                                  ),
+                                ),
+                                TextFormField(
+                                  controller: _password,
+                                  decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    icon: Icon(Icons.password),
+                                  ),
+                                ),
+                                Text(
+                                  error,
+                                  style: TextStyle(
+                                    color: red,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ));
                   });
             },
             child: Icon(
@@ -133,9 +151,4 @@ class _HomeAppState extends State<HomeApp> {
           onItemTapped(index);
         });
   }
-
-
-  }
-
-
-
+}
