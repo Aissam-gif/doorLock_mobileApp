@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:icon_badge/icon_badge.dart';
 import 'package:iot_project/constaints.dart';
 import 'package:iot_project/models/user_model.dart';
 import 'package:iot_project/pages/httpRequest.dart';
@@ -30,6 +31,7 @@ class LockPage extends StatefulWidget {
 
 class _LockState extends State<LockPage> {
   String result = "";
+
   Lock _lock = Lock(lockState: true, lockImage: LOCK_CLOSED_IMAGE);
 
   unlock() {
@@ -44,6 +46,32 @@ class _LockState extends State<LockPage> {
       _lock.lockState = true;
       _lock.lockImage = LOCK_CLOSED_IMAGE;
     });
+  }
+
+  late DateTime now;
+  refreshStatus() {
+    AuthenticationProvider.getLockState().then((value) => {
+          this.setState(() {
+            result = 'Updated successfuly';
+            if (value['message'] == 'true') {
+              lock();
+            } else if (value['message'] == 'false') {
+              unlock();
+            }
+          })
+        });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    AuthenticationProvider.getLockState().then((value) => {
+          if (value['message'] == 'true')
+            {lock()}
+          else if (value['message'] == 'false')
+            {unlock()}
+        });
   }
 
   @override
@@ -63,6 +91,19 @@ class _LockState extends State<LockPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Container(
+              child: IconBadge(
+                icon: Icon(Icons.refresh),
+                itemCount: 0,
+                badgeColor: Colors.red,
+                itemColor: mainFontColor,
+                hideZero: true,
+                top: -1,
+                onTap: () {
+                  refreshStatus();
+                },
+              ),
+            ),
             Container(
               width: 250,
               height: 250,

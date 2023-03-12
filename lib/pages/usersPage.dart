@@ -58,6 +58,14 @@ class _UsersState extends State<UsersPage> {
     }
   }
 
+  refreshPage() {
+    getUsersApi().then((value) => {
+          this.setState(() {
+            filtredUsers = value;
+          }),
+        });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -208,7 +216,7 @@ class _UsersState extends State<UsersPage> {
                               MaterialPageRoute(
                                 builder: (context) =>
                                     UserPage(user: filtredUsers[index]),
-                              ));
+                              )).then((_) => {refreshPage()});
                         },
                       );
                     },

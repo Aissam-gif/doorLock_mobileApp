@@ -101,14 +101,18 @@ class AuthenticationProvider {
   }
 
   static Future<dynamic> getLockState() async {
-    final response = await http.get(Uri.parse(server + '/lockState'),
+    final response = await http.get(Uri.parse(server + 'lockState'),
         headers: {'Authorization': 'Bearer ${AuthenticationProvider.token}'});
-    var data = jsonDecode(response.body.toString());
-    print(data["message"]);
     if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      dynamic data = jsonDecode(response.body);
+      // print(data['message']);
       return data;
     } else {
-      return data;
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load lock state');
     }
   }
 
