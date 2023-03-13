@@ -2,7 +2,7 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iot_project/pages/httpRequest.dart';
-import 'package:iot_project/pages/settingsPage.dart';
+import 'package:iot_project/pages/loginPage.dart';
 import 'package:iot_project/theme/colors.dart';
 
 import 'pages/dashboardPage.dart';
@@ -21,8 +21,7 @@ class _HomeAppState extends State<HomeApp> {
   static const List<Widget> pages = <Widget>[
     DashboardPage(),
     LockPage(),
-    UsersPage(),
-    SettingsPage()
+    UsersPage()
   ];
 
   void onItemTapped(int index) {
@@ -133,7 +132,7 @@ class _HomeAppState extends State<HomeApp> {
       CupertinoIcons.home,
       CupertinoIcons.lock,
       CupertinoIcons.person,
-      CupertinoIcons.settings,
+      CupertinoIcons.arrow_left_circle,
     ];
     return AnimatedBottomNavigationBar(
         backgroundColor: primary,
@@ -148,6 +147,12 @@ class _HomeAppState extends State<HomeApp> {
         rightCornerRadius: 10,
         elevation: 2,
         onTap: (index) {
+          if (index == 3) {
+            // SIGN OUT
+            AuthenticationProvider.logout();
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => LoginPage()));
+          }
           onItemTapped(index);
         });
   }

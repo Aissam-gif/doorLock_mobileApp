@@ -222,7 +222,7 @@ class AuthenticationProvider {
     }
   }
 
-  void logout() {
+  static void logout() {
     // Clear the stored token
     _token = null;
   }

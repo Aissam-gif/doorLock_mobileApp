@@ -33,39 +33,34 @@ class _LineChartState extends State<LineChartSample> {
           ),
         ),
         SizedBox(
-          width: 60,
-          height: 38,
-          child: Container(
-          decoration: BoxDecoration(
-          border: Border.all(color: buttoncolor)
-          ),
-            child: TextButton(
-              onPressed: () {
-                setState(() {
-                  showAvg = !showAvg;
-                });
-              },
-              child: Text(
-                'avg',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: showAvg ? mainFontColor.withOpacity(0.5) : mainFontColor,
+            width: 60,
+            height: 38,
+            child: Container(
+              decoration: BoxDecoration(border: Border.all(color: buttoncolor)),
+              child: TextButton(
+                onPressed: () {
+                  setState(() {
+                    showAvg = !showAvg;
+                  });
+                },
+                child: Text(
+                  'avg',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: showAvg
+                        ? mainFontColor.withOpacity(0.5)
+                        : mainFontColor,
+                  ),
                 ),
               ),
-            ),
-          )
-
-        ),
+            )),
       ],
     );
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-      fontWeight: FontWeight.w100,
-      fontSize: 7,
-      color: mainFontColor
-    );
+        fontWeight: FontWeight.w100, fontSize: 7, color: mainFontColor);
     Widget text;
     switch (value.toInt()) {
       case 1:
@@ -77,17 +72,18 @@ class _LineChartState extends State<LineChartSample> {
       case 3:
         text = const Text('MAR', style: style);
         break;
-        case 4:
-      text = const Text('APR', style: style);
-      break;
+      case 4:
+        text = const Text('APR', style: style);
+        break;
       case 5:
         text = const Text('MAI', style: style);
         break;
       case 6:
         text = const Text('JUN', style: style);
-        break;case 7:
-      text = const Text('JUL', style: style);
-      break;
+        break;
+      case 7:
+        text = const Text('JUL', style: style);
+        break;
       case 8:
         text = const Text('AUG', style: style);
         break;
@@ -99,9 +95,10 @@ class _LineChartState extends State<LineChartSample> {
         break;
       case 11:
         text = const Text('NOV', style: style);
-        break;  case 12:
-      text = const Text('DEC', style: style);
-      break;
+        break;
+      case 12:
+        text = const Text('DEC', style: style);
+        break;
       default:
         text = const Text('', style: style);
         break;
@@ -115,10 +112,7 @@ class _LineChartState extends State<LineChartSample> {
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 12,
-      color: mainFontColor
-    );
+        fontWeight: FontWeight.bold, fontSize: 12, color: mainFontColor);
     String text;
     switch (value.toInt()) {
       case 1:
@@ -201,12 +195,11 @@ class _LineChartState extends State<LineChartSample> {
           belowBarData: BarAreaData(
             show: true,
             gradient: LinearGradient(
-              colors: gradientColors
-                  .map((color) => color.withOpacity(0.2))
-                  .toList(),
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter
-            ),
+                colors: gradientColors
+                    .map((color) => color.withOpacity(0.2))
+                    .toList(),
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter),
           ),
         ),
       ],
@@ -309,4 +302,4 @@ class _LineChartState extends State<LineChartSample> {
       ],
     );
   }
-  }
+}

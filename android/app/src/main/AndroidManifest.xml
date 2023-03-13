@@ -2,9 +2,9 @@
     package="com.aissam.iot_project">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="iot_project"
+        android:label="LockLink"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/app_icon"
         android:usesCleartextTraffic="true"
         >
         <activity
